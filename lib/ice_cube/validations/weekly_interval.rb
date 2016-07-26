@@ -36,7 +36,7 @@ module IceCube
       def validate(step_time, schedule)
         t0, t1 = schedule.start_time, step_time
         d0 = Date.new(t0.year, t0.month, t0.day)
-        d1 = Date.new(t1.year, t1.month, t1.day)
+        d1 = Date.new(t1.year, t1.month, t1.day) + 1.day
         days = (d1 - TimeUtil.normalize_wday(d1.wday, week_start)) -
                (d0 - TimeUtil.normalize_wday(d0.wday, week_start))
         offset = ((days.to_i / 7) % interval).nonzero?
