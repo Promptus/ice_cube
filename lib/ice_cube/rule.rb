@@ -60,6 +60,10 @@ module IceCube
       next_time(time, schedule, time).to_i == time.to_i
     end
 
+    def on_date?(time, schedule)
+      next_time(time, schedule, time)&.to_date == time&.to_date
+    end
+
     # Whether this rule requires a full run
     def full_required?
       !@count.nil?

@@ -173,6 +173,11 @@ module IceCube
       enumerate_occurrences(from + 1, nil, options).take(num)
     end
 
+    #The next n occurrences after now, taking into accounr exceptions as days(not specific time)
+    def next_date_occurrences(num, from = nil, options = {})
+      next_occurrences(num, from = nil, options = {:for_date => true})
+    end
+
     # The next occurrence after now (overridable)
     def next_occurrence(from = nil, options = {})
       from = TimeUtil.match_zone(from, start_time) || TimeUtil.now(start_time)
@@ -430,12 +435,12 @@ module IceCube
         reset
         t1 = full_required? ? start_time : opening_time - (spans ? duration : 0)
         loop do
-          break unless (t0 = next_time(t1, closing_time))
+          break unless (t0 = next_time(t1, closing_time, options))
           break if closing_time && t0 > closing_time
           if (spans ? (t0.end_time > opening_time) : (t0 >= opening_time))
             yielder << (block_given? ? block.call(t0) : t0)
           end
-          break unless (t1 = next_time(t0 + 1, closing_time))
+          break unless (t1 = next_time(t0 + 1, closing_time, options))
           break if closing_time && t1 > closing_time
           if TimeUtil.same_clock?(t0, t1) && recurrence_rules.any?(&:dst_adjust?)
             wind_back_dst
@@ -450,7 +455,7 @@ module IceCube
     end
 
     # Get the next time after (or including) a specific time
-    def next_time(time, closing_time)
+    def next_time(time, closing_time, options={} )
       loop do
         min_time = recurrence_rules_with_implicit_start_occurrence.reduce(nil) do |min_time, rule|
           begin
@@ -461,7 +466,7 @@ module IceCube
           end
         end
         break nil unless min_time
-        next (time = min_time + 1) if exception_time?(min_time)
+        next (time = min_time + 1) if exception_time?(min_time, options)
         break Occurrence.new(min_time, min_time + duration)
       end
     end
@@ -475,9 +480,9 @@ module IceCube
 
     # Return a boolean indicating whether or not a specific time
     # is excluded from the schedule
-    def exception_time?(time)
+    def exception_time?(time, options={})
       @all_exception_rules.any? do |rule|
-        rule.on?(time, start_time)
+        options[:for_date] ? rule.on_date?(time, start_time) : rule.on?(time, start_time)
       end
     end
 
