@@ -147,6 +147,39 @@ module IceCube
       ]
     end
 
+    it 'should produce correct next occurrences on biweekly mondays when monday is the week start' do
+      schedule = Schedule.new(t0 = Time.utc(2017,4,17,8,30))
+      schedule.add_recurrence_rule(IceCube::WeeklyRule.new(2, :monday).day(:monday))
+      occurrences = 17.times.map do |n|
+        now = t0 + (n * ONE_DAY)
+        "#{now.to_date.iso8601} (#{now.wday}) => #{schedule.next_occurrences(1, now)[0].to_date.iso8601}"
+      end
+      expected = (<<-TXT
+        2017-04-17 (1) => 2017-05-01
+        2017-04-18 (2) => 2017-05-01
+        2017-04-19 (3) => 2017-05-01
+        2017-04-20 (4) => 2017-05-01
+        2017-04-21 (5) => 2017-05-01
+        2017-04-22 (6) => 2017-05-01
+        2017-04-23 (0) => 2017-05-01
+        2017-04-24 (1) => 2017-05-01
+        2017-04-25 (2) => 2017-05-01
+        2017-04-26 (3) => 2017-05-01
+        2017-04-27 (4) => 2017-05-01
+        2017-04-28 (5) => 2017-05-01
+        2017-04-29 (6) => 2017-05-01
+        2017-04-30 (0) => 2017-05-01
+        2017-05-01 (1) => 2017-05-15
+        2017-05-02 (2) => 2017-05-15
+        2017-05-03 (3) => 2017-05-15
+        TXT
+      ).split("\n").map(&:strip)
+      expected.each_with_index do |time, i|
+        expect(occurrences[i]).to eq(time)
+      end
+    end
+
+
     it 'should produce correct next occurrences on biweekly tuesdays when monday is the week start' do
       schedule = Schedule.new(t0 = Time.utc(2012, 2, 7)) # this was a tuesday
       schedule.add_recurrence_rule Rule.weekly(2, :monday).day(:tuesday)
