@@ -41,9 +41,9 @@ module IceCube
       wday_validations = other_interval_validations.select { |v| v.type == :wday }
       return 0 if wday_validations.none?
 
-      days = (step_time - start_time).to_i / ONE_DAY
+      days = step_time.to_date - start_time.to_date
       interval = base_interval_validation.validate(step_time, start_time).to_i
-      min_wday = TimeUtil.normalize_wday(wday_validations.min_by(&:day).day, week_start)
+      min_wday = wday_validations.map { |v| TimeUtil.normalize_wday(v.day, week_start) }.min
       step_wday = TimeUtil.normalize_wday(step_time.wday, week_start)
 
       days + interval - step_wday + min_wday
