@@ -409,6 +409,32 @@ describe IceCube::Schedule do
 
   end
 
+  describe :next_date_occurrences do
+    before do
+      @start_time = Time.now
+      @schedule = IceCube::Schedule.new @start_time
+      @schedule.add_recurrence_rule IceCube::Rule.daily.count(10)
+      @schedule.add_exception_time @start_time + 1.day
+    end
+
+    it "will return occurrences in time format" do
+      occurrences = @schedule.next_date_occurrences(3)
+      expect(occurrences).to eq [@start_time + IceCube::ONE_DAY * 2,
+                                 @start_time + IceCube::ONE_DAY * 3,
+                                 @start_time + IceCube::ONE_DAY * 4]
+    end
+
+    it "will exclude exceptions set on the same day, but different time" do
+      @schedule.add_exception_time @start_time + 3.days + 2.hours
+      expect(@schedule.next_occurrences(3)).to eq [@start_time + IceCube::ONE_DAY * 2,
+                                                   @start_time + IceCube::ONE_DAY * 3,
+                                                   @start_time + IceCube::ONE_DAY * 4]
+      expect(@schedule.next_date_occurrences(3)).to eq [@start_time + IceCube::ONE_DAY * 2,
+                                                     @start_time + IceCube::ONE_DAY * 4,
+                                                     @start_time + IceCube::ONE_DAY * 5]
+    end
+  end
+
   describe :next_occurrence do
 
     it 'should be able to calculate the next occurrence past an exception time' do
