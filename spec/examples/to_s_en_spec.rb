@@ -1,6 +1,4 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-require 'i18n'
-require 'ice_cube/null_i18n'
 
 describe IceCube::Schedule, 'to_s' do
 
@@ -29,6 +27,13 @@ describe IceCube::Schedule, 'to_s' do
     it 'should have a useful base to_s representation for a daily rule' do
       expect(IceCube::Rule.daily.to_s).to eq('Daily')
       expect(IceCube::Rule.daily(2).to_s).to eq('Every 2 days')
+    end
+
+    it 'should be able to say what time of the day something happens' do
+      schedule = IceCube::Schedule.new(Time.now)
+      schedule.add_recurrence_rule IceCube::Rule.daily
+      rule_str = schedule.to_s(show_time: true)
+      expect(rule_str).to eq("Daily at #{Time.now.strftime("%H:%M")}")
     end
 
     it 'should have a useful base to_s representation for a weekly rule' do

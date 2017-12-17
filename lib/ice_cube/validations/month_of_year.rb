@@ -8,6 +8,7 @@ module IceCube
           raise ArgumentError, "expecting Integer or Symbol value for month, got #{month.inspect}"
         end
         month = TimeUtil.sym_to_month(month)
+        verify_alignment(month, :month, :month_of_year) { |error| raise error }
         validations_for(:month_of_year) << Validation.new(month)
       end
       clobber_base_validations :month
@@ -23,6 +24,10 @@ module IceCube
         @month = month
       end
 
+      def key
+        :month_of_year
+      end
+
       def type
         :month
       end
@@ -32,7 +37,7 @@ module IceCube
       end
 
       def build_s(builder)
-        builder.piece(:month_of_year) << IceCube::I18n.t("ice_cube.date.month_names")[month]
+        builder.piece(:month_of_year) << IceCube::I18n.t("date.month_names")[month]
       end
 
       def build_hash(builder)
