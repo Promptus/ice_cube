@@ -63,6 +63,7 @@ fr:
     each_day:
       one: Quotidien
       other: Tous les %{count} jours
+      at: ' à '
     each_week:
       one: Hebdomadaire
       other: Toutes les %{count} semaines

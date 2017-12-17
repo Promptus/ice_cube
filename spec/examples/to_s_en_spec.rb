@@ -29,6 +29,13 @@ describe IceCube::Schedule, 'to_s' do
       expect(IceCube::Rule.daily(2).to_s).to eq('Every 2 days')
     end
 
+    it 'should be able to say what time of the day something happens' do
+      schedule = IceCube::Schedule.new(Time.now)
+      schedule.add_recurrence_rule IceCube::Rule.daily
+      rule_str = schedule.to_s(show_time: true)
+      expect(rule_str).to eq("Daily at #{Time.now.strftime("%H:%M")}")
+    end
+
     it 'should have a useful base to_s representation for a weekly rule' do
       expect(IceCube::Rule.weekly.to_s).to eq('Weekly')
       expect(IceCube::Rule.weekly(2).to_s).to eq('Every 2 weeks')

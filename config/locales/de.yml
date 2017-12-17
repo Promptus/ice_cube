@@ -63,6 +63,7 @@ de:
     each_day:
       one: Täglich
       other: Alle %{count} Tage
+      at: ' um '
     each_week:
       one: Wöchentlich
       other: Alle %{count} Wochen

@@ -41,6 +41,7 @@ en:
     each_day:
       one: Daily
       other: Every %{count} days
+      at: ' at '
     each_week:
       one: Weekly
       other: Every %{count} weeks
