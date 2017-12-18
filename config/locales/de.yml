@@ -74,6 +74,7 @@ de:
       other: Alle %{count} Jahre
     'on': am %{sentence}
     in: 'im %{target}'
+    at: " um "
     integer:
       negative: '%{ordinal}. letzter'
       literal_ordinals:

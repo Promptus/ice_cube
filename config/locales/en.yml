@@ -74,6 +74,7 @@ en:
       other: Every %{count} years
     'on': on the %{sentence}
     in: 'in %{target}'
+    at: " at "
     integer:
       negative: '%{ordinal} to last'
       literal_ordinals:
