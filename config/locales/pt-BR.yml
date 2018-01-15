@@ -6,7 +6,6 @@ pt-BR:
     date:
       formats:
         default: '%-d %B %Y'
-        with_time: '%-d %B %Y às %H:%M'
       month_names:
       -
       - Janeiro

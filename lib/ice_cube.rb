@@ -75,12 +75,6 @@ module IceCube
     IceCube::I18n.t("ice_cube.date.formats.default")
   end
 
-  # Defines the format used by IceCube when printing out Schedule#to_s and show_time: true.
-  # Format '%B %e, %Y at %H:%M'
-  def self.to_s_with_time
-    IceCube::I18n.t("ice_cube.date.formats.with_time")
-  end
-
   # Sets the format used by IceCube when printing out Schedule#to_s.
   def self.to_s_time_format=(format)
     @to_s_time_format = format

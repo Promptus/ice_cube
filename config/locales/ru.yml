@@ -6,7 +6,6 @@ ru:
     date:
       formats:
         default: '%-d %B %Y'
-        with_time: '%-d %B %Y в %H:%M'
       month_names:
       -
       - январь
