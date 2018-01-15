@@ -6,6 +6,7 @@ de:
     date:
       formats:
         default: '%-d. %B %Y'
+        with_time: '%-d. %B %Y um %H:%M'
       month_names:
       -
       - Januar

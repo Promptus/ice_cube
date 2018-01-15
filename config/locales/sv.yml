@@ -6,6 +6,7 @@ sv:
     date:
       formats:
         default: '%-d %B %Y'
+        with_time: '%-d %B %Y kl %H:%M'
       month_names:
       -
       - januari

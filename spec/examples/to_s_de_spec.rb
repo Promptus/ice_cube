@@ -239,4 +239,10 @@ describe IceCube::Schedule, 'to_s' do
     expect(rule_str).to eq("Jährlich am 42. Tag des Jahres um 07:17")
   end
 
+  it 'should show start time for a single time event' do
+    schedule = IceCube::Schedule.new(Time.mktime(2017, 7, 7, 07, 17))
+    single_event = schedule.to_s(show_time: true)
+    expect(single_event).to eq("7. Juli 2017 um 07:17")
+  end
+
 end

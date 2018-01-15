@@ -6,6 +6,7 @@ ja:
     date:
       formats:
         default: '%Y年%m月%d日'
+        with_time: '%Y年%m月%d日%H:%M'
       month_names:
       -
       - 1月

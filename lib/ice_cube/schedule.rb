@@ -1,4 +1,5 @@
 require 'yaml'
+require 'byebug'
 
 module IceCube
 
@@ -313,11 +314,12 @@ module IceCube
     def to_s(opts = {})
       pieces = []
       rd = recurrence_times_with_start_time - extimes
-      pieces.concat rd.sort.map { |t| IceCube::I18n.l(t, format: IceCube.to_s_time_format) }
       if opts[:show_time]
-        pieces.concat rrules.map { |t| t.to_s + IceCube::I18n.t('ice_cube.at') + start_time.strftime("%H:%M") }
+        pieces.concat rd.sort.map { |t| IceCube::I18n.l(t, format: IceCube.to_s_with_time) }
+        pieces.concat rrules.map  { |t| t.to_s + IceCube::I18n.t('ice_cube.at') + start_time.strftime("%H:%M") }
       else
-        pieces.concat rrules.map { |t| t.to_s }
+        pieces.concat rd.sort.map { |t| IceCube::I18n.l(t, format: IceCube.to_s_time_format) }
+        pieces.concat rrules.map  { |t| t.to_s }
       end
       pieces.concat exrules.map { |t| IceCube::I18n.t('ice_cube.not', target: t.to_s) }
       pieces.concat extimes.sort.map { |t|
