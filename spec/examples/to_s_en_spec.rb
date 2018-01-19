@@ -169,6 +169,12 @@ describe IceCube::Schedule, 'to_s' do
       expect(schedule.to_s).to eq(schedule.rrules[0].to_s)
     end
 
+    it 'should show start time for a single time event' do
+      schedule = IceCube::Schedule.new(Time.mktime(2017, 7, 7, 07, 17))
+      single_event = schedule.to_s(show_time: true)
+      expect(single_event).to eq("July 7, 2017 at 07:17")
+    end
+
     it 'should be able to say the last Thursday of the month' do
       rule_str = IceCube::Rule.monthly.day_of_week(:thursday => [-1]).to_s
       expect(rule_str).to eq('Monthly on the last Thursday')

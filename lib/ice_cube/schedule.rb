@@ -312,19 +312,41 @@ module IceCube
     # String serialization
     def to_s(opts = {})
       pieces = []
+      show_time = !!opts[:show_time]
+
+      rd = recurrent_dates_formatted(show_time)
+      rrules = recurrent_rules_formatted(show_time)
+
+      pieces = (rd << rrules << extimes_formatted << exrules_formatted).flatten
+      pieces.join(IceCube::I18n.t('ice_cube.pieces_connector'))
+    end
+
+    def recurrent_dates_formatted(show_time)
       rd = recurrence_times_with_start_time - extimes
-      pieces.concat rd.sort.map { |t| IceCube::I18n.l(t, format: IceCube.to_s_time_format) }
-      if opts[:show_time]
-        pieces.concat rrules.map { |t| t.to_s + IceCube::I18n.t('ice_cube.at') + start_time.strftime("%H:%M") }
+      if show_time
+        rd.sort.map { |t| IceCube::I18n.l(t, format: IceCube.to_s_time_format) + IceCube::I18n.t('ice_cube.at') + start_time.strftime("%H:%M") }
       else
-        pieces.concat rrules.map { |t| t.to_s }
+        rd.sort.map { |t| IceCube::I18n.l(t, format: IceCube.to_s_time_format) }
       end
-      pieces.concat exrules.map { |t| IceCube::I18n.t('ice_cube.not', target: t.to_s) }
-      pieces.concat extimes.sort.map { |t|
+    end
+
+    def recurrent_rules_formatted(show_time)
+      if show_time
+        rrules.map { |t| t.to_s + IceCube::I18n.t('ice_cube.at') + start_time.strftime("%H:%M") }
+      else
+        rrules.map { |t| t.to_s }
+      end
+    end
+
+    def extimes_formatted
+      extimes.sort.map do |t|
         target = IceCube::I18n.l(t, format: IceCube.to_s_time_format)
         IceCube::I18n.t('ice_cube.not_on', target: target)
-      }
-      pieces.join(IceCube::I18n.t('ice_cube.pieces_connector'))
+      end
+    end
+
+    def exrules_formatted
+      exrules.map { |t| IceCube::I18n.t('ice_cube.not', target: t.to_s) }
     end
 
     # Serialize this schedule to_ical
