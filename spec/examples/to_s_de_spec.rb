@@ -11,7 +11,6 @@ describe IceCube::Schedule, 'to_s' do
     I18n.locale = :en
   end
 
-
   it 'should represent its start time by default' do
     t0 = Time.local(2013, 2, 14)
     expect(IceCube::Schedule.new(t0).to_s).to eq('14. Februar 2013')
@@ -210,6 +209,40 @@ describe IceCube::Schedule, 'to_s' do
     schedule = IceCube::Schedule.new(Time.now)
     schedule.add_recurrence_rule IceCube::Rule.weekly.count(2)
     expect(schedule.to_s).to eq('Wöchentlich 2 mal')
+  end
+
+  it 'should show time for a daily rule if show_time is true' do
+    schedule = IceCube::Schedule.new(Time.mktime(2017, 7, 7, 07, 17))
+    schedule.add_recurrence_rule IceCube::Rule.daily
+    rule_str = schedule.to_s(show_time: true)
+    expect(rule_str).to eq("Täglich um 07:17")
+  end
+
+  it 'should show time for a weekly rule if show_time is true' do
+    schedule = IceCube::Schedule.new(Time.mktime(2017, 7, 7, 07, 17))
+    schedule.add_recurrence_rule IceCube::Rule.weekly.day(:monday)
+    rule_str = schedule.to_s(show_time: true)
+    expect(rule_str).to eq("Wöchentlich Montags um 07:17")
+  end
+
+  it 'should show time for a monthly rule if show_time is true' do
+    schedule = IceCube::Schedule.new(Time.mktime(2017, 7, 7, 07, 17))
+    schedule.add_recurrence_rule IceCube::Rule.monthly.day_of_month(1)
+    rule_str = schedule.to_s(show_time: true)
+    expect(rule_str).to eq("Monatlich am 1. Tag des Monats um 07:17")
+  end
+
+  it 'should show time for a yearly rule if show_time is true' do
+    schedule = IceCube::Schedule.new(Time.mktime(2017, 7, 7, 07, 17))
+    schedule.add_recurrence_rule IceCube::Rule.yearly.day_of_year(42)
+    rule_str = schedule.to_s(show_time: true)
+    expect(rule_str).to eq("Jährlich am 42. Tag des Jahres um 07:17")
+  end
+
+  it 'should show start time for a single time event' do
+    schedule = IceCube::Schedule.new(Time.mktime(2017, 7, 7, 07, 17))
+    single_event = schedule.to_s(show_time: true)
+    expect(single_event).to eq("7. Juli 2017 um 07:17")
   end
 
 end

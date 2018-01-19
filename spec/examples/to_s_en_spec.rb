@@ -31,9 +31,23 @@ describe IceCube::Schedule, 'to_s' do
       expect(IceCube::Rule.daily(2).to_s).to eq('Every 2 days')
     end
 
+    it 'should show time for a daily rule if show_time is true' do
+      schedule = IceCube::Schedule.new(Time.mktime(2017, 7, 7, 07, 17))
+      schedule.add_recurrence_rule IceCube::Rule.daily
+      rule_str = schedule.to_s(show_time: true)
+      expect(rule_str).to eq("Daily at 07:17")
+    end
+
     it 'should have a useful base to_s representation for a weekly rule' do
       expect(IceCube::Rule.weekly.to_s).to eq('Weekly')
       expect(IceCube::Rule.weekly(2).to_s).to eq('Every 2 weeks')
+    end
+
+    it 'should show time for a weekly rule if show_time is true' do
+      schedule = IceCube::Schedule.new(Time.mktime(2017, 7, 7, 07, 17))
+      schedule.add_recurrence_rule IceCube::Rule.weekly.day(:monday)
+      rule_str = schedule.to_s(show_time: true)
+      expect(rule_str).to eq("Weekly on Mondays at 07:17")
     end
 
     it 'should have a useful base to_s representation for a monthly rule' do
@@ -41,9 +55,23 @@ describe IceCube::Schedule, 'to_s' do
       expect(IceCube::Rule.monthly(2).to_s).to eq('Every 2 months')
     end
 
+    it 'should show time for a monthly rule if show_time is true' do
+      schedule = IceCube::Schedule.new(Time.mktime(2017, 7, 7, 07, 17))
+      schedule.add_recurrence_rule IceCube::Rule.monthly.day_of_month(1)
+      rule_str = schedule.to_s(show_time: true)
+      expect(rule_str).to eq("Monthly on the 1st day of the month at 07:17")
+    end
+
     it 'should have a useful base to_s representation for a yearly rule' do
       expect(IceCube::Rule.yearly.to_s).to eq('Yearly')
       expect(IceCube::Rule.yearly(2).to_s).to eq('Every 2 years')
+    end
+
+    it 'should show time for a yearly rule if show_time is true' do
+      schedule = IceCube::Schedule.new(Time.mktime(2017, 7, 7, 07, 17))
+      schedule.add_recurrence_rule IceCube::Rule.yearly.day_of_year(42)
+      rule_str = schedule.to_s(show_time: true)
+      expect(rule_str).to eq("Yearly on the 42nd day of the year at 07:17")
     end
 
     it 'should work with various sentence types properly' do
@@ -78,8 +106,7 @@ describe IceCube::Schedule, 'to_s' do
 
     it 'should not show weekdays as such when a weekend day is present' do
       expect(IceCube::Rule.weekly.day(
-        :sunday, :monday, :tuesday, :wednesday,
-        :thursday, :friday
+        :sunday, :monday, :tuesday, :wednesday, :thursday, :friday
       ).to_s).to eq('Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, and Fridays')
     end
 
@@ -140,6 +167,12 @@ describe IceCube::Schedule, 'to_s' do
       schedule = IceCube::Schedule.new Time.local(2010, 3, 20)
       schedule.add_recurrence_rule IceCube::Rule.weekly.day_of_week(:monday => [1])
       expect(schedule.to_s).to eq(schedule.rrules[0].to_s)
+    end
+
+    it 'should show start time for a single time event' do
+      schedule = IceCube::Schedule.new(Time.mktime(2017, 7, 7, 07, 17))
+      single_event = schedule.to_s(show_time: true)
+      expect(single_event).to eq("July 7, 2017 at 07:17")
     end
 
     it 'should be able to say the last Thursday of the month' do
