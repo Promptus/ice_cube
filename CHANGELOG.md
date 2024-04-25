@@ -4,6 +4,9 @@
 
 * [FEATURE]     Italian translations
 
+### Fixed
+- Fix for weekly occurrences when the next occurrence happens within a DST switch timespan ([#551](https://github.com/ice-cube-ruby/ice_cube/pull/551)) by [@larskuhnt](https://github.com/larskuhnt)
+
 ## 0.16.3 / 2018-07-23
 
 * [FEATURE]     Added support for parsing RDATE from iCal format
