@@ -1,6 +1,6 @@
 # ice_cube - Easy schedule expansion
 
-[![Build Status][travis-ice_cube-png]][travis-ice_cube]
+[![Build Status][travis-ice_cube-badge_image]][travis-ice_cube]
 [![Gem Version](https://badge.fury.io/rb/ice_cube.svg)](http://badge.fury.io/rb/ice_cube)
 
 ```bash
@@ -43,9 +43,13 @@ With ice_cube, you can specify (in increasing order of precedence):
 * Recurrence Times - To specifically include in a schedule
 * Exception Times - To specifically exclude from a schedule
 
-Example: Specifying a recurrence with an exception time
+Example: Specifying a recurrence with an exception time. Requires "rails/activesupport" (`gem install 'activesupport'`).
+
 
 ```ruby
+require 'ice_cube'
+require 'active_support/time'
+
 schedule = IceCube::Schedule.new(now = Time.now) do |s|
   s.add_recurrence_rule(IceCube::Rule.daily.count(4))
   s.add_exception_time(now + 1.day)
@@ -136,7 +140,7 @@ the schedule's start_time. Schedule start times are supported as:
 ice_cube implements its own hash-based .to_yaml, so you can quickly (and
 safely) serialize schedule objects in and out of your data store
 
-It also supports partial serialization to/from `ICAL`. `RDATE` are not supported yet.
+It also supports partial serialization to/from `ICAL`. Parsing datetimes with time zone information is not currently supported.
 
 ``` ruby
 yaml = schedule.to_yaml
@@ -316,7 +320,7 @@ Use the GitHub [issue tracker][ice_cube-issues]
 [ical-3.6.1]: https://tools.ietf.org/html/rfc5545#section-3.6.1
 [github-avit]: https://github.com/avit/
 [travis-ice_cube]: http://travis-ci.org/seejohnrun/ice_cube
-[travis-ice_cube-png]: https://secure.travis-ci.org/seejohnrun/ice_cube.png
+[travis-ice_cube-badge_image]: https://secure.travis-ci.org/seejohnrun/ice_cube.svg
 [ice_cube-lone_star_pdf]: http://seejohnrun.github.com/ice_cube/static/lsrc_ice_cube.pdf
 [ice_cube-ruby_nyc_pdf]: http://seejohnrun.github.com/ice_cube/static/ice_cube_ruby_nyc.pdf
 [ice_cube-docs]: http://seejohnrun.github.com/ice_cube/

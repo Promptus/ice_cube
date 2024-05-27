@@ -1,6 +1,19 @@
 # Changelog
 
-## Current
+## 0.16.4 / 2021-10-21
+
+* [FEATURE]     Italian translations
+
+## 0.16.3 / 2018-07-23
+
+* [FEATURE]     Added support for parsing RDATE from iCal format
+
+## 0.16.2 / 2017-07-10
+
+* [BUGFIX]      Fix serialization of Date values (for `until`) (#399)
+* [BUGFIX]      Fix double DST occurrences (#398)
+* [BUGFIX]      Realign first wday for monday-based weekly rules (#402)
+* [BUGFIX]      Fix weekly realignment for `spans: true` option (#402)
 
 ## 0.16.1 / 2017-05-03
 

@@ -19,11 +19,9 @@ module IceCube
       until_time || occurrence_count
     end
 
-    def ==(rule)
-      if rule.is_a? Rule
-        hash = to_hash
-        hash && hash == rule.to_hash
-      end
+    def ==(other)
+      return false unless other.is_a? Rule
+      hash == other.hash
     end
 
     def hash
@@ -31,7 +29,7 @@ module IceCube
     end
 
     def to_ical
-      raise MethodNotImplemented, "Expected to be overrridden by subclasses"
+      raise MethodNotImplemented, "Expected to be overridden by subclasses"
     end
 
     # Convert from ical string and create a rule
@@ -58,11 +56,6 @@ module IceCube
 
     def on?(time, schedule)
       next_time(time, schedule, time).to_i == time.to_i
-    end
-
-    # Whether this rule requires a full run
-    def full_required?
-      !@count.nil?
     end
 
     class << self
