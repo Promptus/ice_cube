@@ -312,7 +312,9 @@ module IceCube
 
       symbol_yaml = Schedule.from_hash(symbol_data).to_yaml
       string_yaml = Schedule.from_hash(string_data).to_yaml
-      expect(YAML.load(symbol_yaml)).to eq(YAML.load(string_yaml))
+
+      expect(YAML.safe_load(symbol_yaml, permitted_classes: [Symbol, Time]))
+        .to eq(YAML.safe_load(string_yaml, permitted_classes: [Symbol, Time]))
     end
 
     it 'should raise an ArgumentError when trying to deserialize an invalid rule type' do
